@@ -1,0 +1,2 @@
+# miniature-adventure
+tdmelodicをopenjtalkの辞書にするやつ
