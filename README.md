@@ -20,7 +20,7 @@ https://github.com/PKSHATechnology-Research/tdmelodic をcloneし[パッチ](./t
 [tdmelodicのマニュアル](https://tdmelodic.readthedocs.io/ja/latest/index.html)に従って辞書を生成する．
 
 生成された辞書を`tdmelodic.csv`とし，以下のコマンドを実行する．（ここでは生成する辞書の名前を`tdmelodic_openjtalk.csv`）とする．
-grepコマンドで2回以上`[`が出てくるor`]`行を削除する．これをしないと間違ったアクセント核の単語も追加されてしまう．
+grepコマンドで2回以上`[`が出てくるor2回以上`]`が出てくる行を削除する．これをしないと間違ったアクセント核の単語も追加されてしまう．
 
 ```sh
 grep -v '[^,]*\][^,]*\]\|[^,]*\[[^,]*\[' tdmelodic.csv | awk -f tdmelodic_to_openjtalk.awk > tdmelodic_openjtalk.csv
