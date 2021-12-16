@@ -26,6 +26,7 @@ function conv_contextID(id) {
 	gsub("\\]", "", $14);
 	printf(",%s", $14); # pron
 	printf(",%s", $28); # aType/全体モーラ数
+	if($29 == "") $29 = "*";
 	printf(",%s", $29); # aConType
 	print("");
 }
