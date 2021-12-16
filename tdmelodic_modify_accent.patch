@@ -1,0 +1,54 @@
+diff --git a/tdmelodic/filters/neologd_patch.py b/tdmelodic/filters/neologd_patch.py
+index 9d1c223..cace6a9 100644
+--- a/tdmelodic/filters/neologd_patch.py
++++ b/tdmelodic/filters/neologd_patch.py
+@@ -67,7 +67,7 @@ class NeologdPatch(object):
+     def normalize_surface(self, line, idx_surface=None):
+         s = line[idx_surface]
+         s = unicodedata.normalize("NFKC", s)
+-        s = s.upper()
++        #s = s.upper()
+         s = jaconv.normalize(s, "NFKC")
+         s = jaconv.h2z(s, digit=True, ascii=True, kana=True)
+         s = s.replace("\u00A5", "\uFFE5") # yen symbol
+@@ -101,6 +101,9 @@ class NeologdPatch(object):
+             if self.wt.is_numeral(line):
+                 return None
+ 
++        if self.wt.is_KK(line) or self.wt.is_YK(line) or self.wt.is_school(line) or self.wt.is_station(line) or self.wt.is_road(line) or self.wt.is_placename(line):
++            return None
++
+         line = copy.deepcopy(line)
+ 
+         # ----------------------------------------------------------------------
+diff --git a/tdmelodic/nn/convert_dic.py b/tdmelodic/nn/convert_dic.py
+index 315442b..b1dfd00 100644
+--- a/tdmelodic/nn/convert_dic.py
++++ b/tdmelodic/nn/convert_dic.py
+@@ -67,6 +67,15 @@ def apply_all(
+             a_est = a_est.tolist()
+             a_est = np.asarray(a_est).astype(np.int32)
+ 
++            def accent_nucleus(morae, A):
++                ret = "{}/" + str(len(morae))
++                if A[0] == 0:
++                    return ret.format(1)
++                for i in range(len(morae)):
++                    if A[i] == 0:
++                        return ret.format(i + 1)
++                return ret.format(0)
++
+             # postprocessing
+             def proc(b, orig_info, a_est):
+                 idx, kanji, yomi, orig_entry = orig_info[b]
+@@ -79,7 +88,7 @@ def apply_all(
+                 y_ = "".join(y_)
+                 orig_entry[index_map["YOMI"]] = y_
+                 if mode == "unidic":
+-                    orig_entry[index_map["ACCENT"]] = "@"
++                    orig_entry[index_map["ACCENT"]] = accent_nucleus(sep_katakana2mora(yomi), A)
+                 return orig_entry
+ 
+             for i in range(len(batch_)):
+@@ -116,4 +125,4 @@ def main():
+             print(e)
