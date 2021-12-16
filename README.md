@@ -7,6 +7,7 @@ FAQ
 - 文字コードはUTF-8を前提にしている
 - 私はNLPド素人
 - なんか間違ってたらそっちが気合で直してくれ
+- tdmelodicをforkするのが面倒だったしforkするほどの変更ではない
 
 ## 動機
 [voicevox engine](https://github.com/VOICEVOX/voicevox_engine)のpyopenjtalk（mecab）に使用されている辞書を改善してより良いアクセントを得たい．
